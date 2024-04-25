@@ -25,7 +25,7 @@ limitations under the License.*/
  */
 #}
 
-{% macro dremio__create_table_as(temporary, relation, sql) -%}
+{% macro dremio__create_table_as(temporary, branch, relation, sql) -%}
   {% set contract_config = config.get('contract') %}
   {% if contract_config.enforced %}
      {{exceptions.warn("Model contracts are not enforced by dbt-dremio!")}}
@@ -35,7 +35,7 @@ limitations under the License.*/
 
   {{ sql_header if sql_header is not none }}
 
-  create table {{ relation }}
+  create table {{ relation }} {% if branch %} at branch {{ branch }} {% endif %}
   {{ partition_method() }} {{ config_cols("partition by") }}
   {{ config_cols("distribute by") }}
   {{ config_cols("localsort by") }}

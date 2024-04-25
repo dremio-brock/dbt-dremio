@@ -35,10 +35,10 @@ limitations under the License.*/
 
   -- build model
   {% call statement('main') -%}
-    {{ create_view_as(target_relation, external_query(sql)) }}
+    {{ create_view_as(target_relation, branch, external_query(sql)) }}
   {%- endcall %}
 
-  {{ apply_twin_strategy(target_relation) }}
+  {{ apply_twin_strategy(target_relation, branch) }}
 
   {{ enable_default_reflection() }}
 

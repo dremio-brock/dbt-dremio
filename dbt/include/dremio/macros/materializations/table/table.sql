@@ -28,17 +28,17 @@ limitations under the License.*/
   -- in case if the existing and future table is delta, we want to do a
   -- create or replace table instead of dropping, so we don't have the table unavailable
   {% if old_relation is not none -%}
-    {{ adapter.drop_relation(old_relation) }}
+    {{ adapter.drop_relation(old_relation, branch) }}
   {%- endif %}
 
   -- build model
   {% call statement('main') -%}
-    {{ create_table_as(False, target_relation, external_query(sql)) }}
+    {{ create_table_as(False, target_relation, branch, external_query(sql)) }}
   {%- endcall %}
 
-  {{ refresh_metadata(target_relation, format) }}
+  {{ refresh_metadata(target_relation, branch, format) }}
 
-  {{ apply_twin_strategy(target_relation) }}
+  {{ apply_twin_strategy(target_relation, branch) }}
 
   {% do persist_docs(target_relation, model) %}
 

@@ -20,27 +20,27 @@ ALTER PDS <PHYSICAL-DATASET-PATH> REFRESH METADATA
 
 ALTER PDS <PHYSICAL-DATASET-PATH> FORGET METADATA
 
-ALTER TABLE <TABLE> REFRESH METADATA
+ALTER TABLE <TABLE> {% if branch %} at branch {{ branch }} {% endif %} REFRESH METADATA
 #}
 
-{% macro refresh_metadata(relation, format='iceberg') -%}
+{% macro refresh_metadata(relation, branch, format='iceberg') -%}
   {%- if format != 'iceberg' -%}
     {% call statement('refresh_metadata') -%}
       {%- if format == 'parquet' -%}
-        {{ alter_table_refresh_metadata(relation) }}
+        {{ alter_table_refresh_metadata(relation, branch) }}
       {%- else -%}
-        {{ alter_pds(relation, avoid_promotion=false, lazy_update=false) }}
+        {{ alter_pds(relation, branch, avoid_promotion=false, lazy_update=false) }}
       {%- endif -%}
     {%- endcall %}
   {%- endif -%}
 {%- endmacro -%}
 
-{% macro alter_table_refresh_metadata(table_relation) -%}
-  alter table {{ table_relation }} refresh metadata
+{% macro alter_table_refresh_metadata(table_relation, branch) -%}
+  alter table {{ table_relation }} {% if branch %} at branch {{ branch }} {% endif %} refresh metadata
 {%- endmacro -%}
 
-{% macro alter_pds(table_relation, avoid_promotion=True, lazy_update=True, delete_when_missing=True, forget_metadata=False) -%}
-  alter pds {{ table_relation }} refresh metadata
+{% macro alter_pds(table_relation, branch, avoid_promotion=True, lazy_update=True, delete_when_missing=True, forget_metadata=False) -%}
+  alter pds {{ table_relation }} {% if branch %} at branch {{ branch }} {% endif %} refresh metadata
   {% if forget_metadata %}
     forget metadata
   {%- else -%}

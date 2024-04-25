@@ -16,6 +16,7 @@ limitations under the License.*/
   {%- set datalake = config.get('datalake', default=target.datalake) %}
   {%- set root_path = config.get('root_path', default=target.root_path) %}
   {%- set identifier = model['alias'] -%}
+  {%- set branch = var('branch') | default(None) %}
   {%- set file = config.get('file', default=identifier) %}
 
   {%- set target_view = api.Relation.create(database=database, schema=schema, identifier=identifier, type='view') -%}
@@ -28,7 +29,7 @@ limitations under the License.*/
 
   -- build model
   {% call statement('main') -%}
-    {{ get_create_view_as_sql(target_view, sql) }}
+    {{ get_create_view_as_sql(target_view, branch, sql) }}
   {%- endcall %}
 
   {{ run_hooks(post_hooks) }}
