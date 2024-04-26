@@ -33,12 +33,12 @@ limitations under the License.*/
 
   -- build model
   {% call statement('main') -%}
-    {{ create_table_as(False, target_relation, branch, external_query(sql)) }}
+    {{ create_table_as(False, target_relation, external_query(sql)) }}
   {%- endcall %}
 
-  {{ refresh_metadata(target_relation, branch, format) }}
+  {{ refresh_metadata(target_relation, format) }}
 
-  {{ apply_twin_strategy(target_relation, branch) }}
+  {{ apply_twin_strategy(target_relation) }}
 
   {% do persist_docs(target_relation, model) %}
 

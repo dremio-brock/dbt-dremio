@@ -38,7 +38,7 @@ limitations under the License.*/
           from {{ render_with_format_clause(target_relation) }}
         {%- endset -%}
         {% call statement('clone_view') -%}
-          {{ create_view_as(view_relation, branch, sql_view) }}
+          {{ create_view_as(view_relation, sql_view) }}
         {%- endcall %}
       {%- endif -%}
     {%- endif -%}

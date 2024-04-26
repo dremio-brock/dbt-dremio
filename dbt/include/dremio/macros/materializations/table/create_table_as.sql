@@ -25,14 +25,14 @@ limitations under the License.*/
  */
 #}
 
-{% macro dremio__create_table_as(temporary, branch, relation, sql) -%}
+{% macro dremio__create_table_as(temporary, relation, sql) -%}
   {% set contract_config = config.get('contract') %}
   {% if contract_config.enforced %}
      {{exceptions.warn("Model contracts are not enforced by dbt-dremio!")}}
   {% endif %}
 
   {%- set sql_header = config.get('sql_header', none) -%}
-
+  {%- set branch = var('branch') | default(None) %}
   {{ sql_header if sql_header is not none }}
 
   create table {{ relation }} {% if branch %} at branch {{ branch }} {% endif %}
