@@ -20,17 +20,19 @@ limitations under the License.*/
     {% do return(tmp_relation) %}
 {% endmacro %}
 
-{% macro dremio__drop_relation(relation, branch) -%}
+{% macro dremio__drop_relation(relation) -%}
   {% call statement('drop_relation', auto_begin=False) -%}
+  {%- set branch = var('branch') | default(None) %}
     drop {{ relation.type }} if exists {{ relation }} {% if branch %} at branch {{ branch }} {% endif %}
   {%- endcall %}
 {% endmacro %}
 
-{% macro dremio__rename_relation(from_relation, to_relation, branch) -%}
+{% macro dremio__rename_relation(from_relation, to_relation) -%}
   {% call statement('rename_relation1/2 - create to_relation from from_relation') -%}
     {{ get_create_table_as_sql(temporary=False, relation=to_relation, sql="select * from " ~ from_relation)}}
   {%- endcall %}
   {% call statement('rename_relation2/2 - drop from_relation') -%}
+  {%- set branch = var('branch') | default(None) %}
     DROP TABLE {{from_relation}} {% if branch %} at branch {{ branch }} {% endif %}
   {%- endcall %}
 {% endmacro %}

@@ -28,7 +28,7 @@ limitations under the License.*/
   -- in case if the existing and future table is delta, we want to do a
   -- create or replace table instead of dropping, so we don't have the table unavailable
   {% if old_relation is not none -%}
-    {{ adapter.drop_relation(old_relation, branch) }}
+    {{ adapter.drop_relation(old_relation) }}
   {%- endif %}
 
   -- build model

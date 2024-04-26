@@ -13,24 +13,23 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 
 {#
-ALTER PDS <PHYSICAL-DATASET-PATH> REFRESH METADATA
+ALTER PDS <PHYSICAL-DATASET-PATH> AT <BRANCH> REFRESH METADATA
     [AVOID PROMOTION | AUTO PROMOTION]
     [FORCE UPDATE | LAZY UPDATE]
     [MAINTAIN WHEN MISSING | DELETE WHEN MISSING]
 
-ALTER PDS <PHYSICAL-DATASET-PATH> FORGET METADATA
+ALTER PDS <PHYSICAL-DATASET-PATH> AT <BRANCH> FORGET METADATA
 
-ALTER TABLE <TABLE> {% if branch %} at branch {{ branch }} {% endif %} REFRESH METADATA
+ALTER TABLE <TABLE> AT <BRANCH> REFRESH METADATA
 #}
 
 {% macro refresh_metadata(relation, format='iceberg') -%}
-{%- set branch = var('branch') | default(None) %}
   {%- if format != 'iceberg' -%}
     {% call statement('refresh_metadata') -%}
       {%- if format == 'parquet' -%}
-        {{ alter_table_refresh_metadata(relation, branch) }}
+        {{ alter_table_refresh_metadata(relation) }}
       {%- else -%}
-        {{ alter_pds(relation, branch, avoid_promotion=false, lazy_update=false) }}
+        {{ alter_pds(relation, avoid_promotion=false, lazy_update=false) }}
       {%- endif -%}
     {%- endcall %}
   {%- endif -%}
