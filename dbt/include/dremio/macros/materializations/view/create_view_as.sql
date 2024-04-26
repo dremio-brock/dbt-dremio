@@ -24,6 +24,6 @@ limitations under the License.*/
 
   {{ sql_header if sql_header is not none }}
 
-  create or replace view {{ relation }} as {{ sql }} {% if branch %} at branch {{ branch }} {% endif %}
+  create or replace view {{ relation }} {% if branch %} at branch {{ branch }} {% endif %} as {{ sql }}
 
 {%- endmacro %}
