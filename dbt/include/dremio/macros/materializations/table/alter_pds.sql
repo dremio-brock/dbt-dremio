@@ -35,7 +35,7 @@ ALTER TABLE <TABLE> AT <BRANCH> REFRESH METADATA
   {%- endif -%}
 {%- endmacro -%}
 
-{% macro alter_table_refresh_metadata(table_relation, branch) -%}
+{% macro alter_table_refresh_metadata(table_relation) -%}
   {%- set branch = var('branch') | default(None) %}
   alter table {{ table_relation }} {% if branch %} at branch {{ branch }} {% endif %} refresh metadata
 {%- endmacro -%}
