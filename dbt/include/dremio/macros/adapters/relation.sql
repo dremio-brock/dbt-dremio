@@ -22,7 +22,7 @@ limitations under the License.*/
 
 {% macro dremio__drop_relation(relation) -%}
   {% call statement('drop_relation', auto_begin=False) -%}
-  {%- set branch = var('branch') | default(None) %}
+  {%- set branch = var('branch', None) %}
     drop {{ relation.type }} if exists {{ relation }} {% if branch %} at branch {{ branch }} {% endif %}
   {%- endcall %}
 {% endmacro %}

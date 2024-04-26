@@ -36,12 +36,12 @@ ALTER TABLE <TABLE> AT <BRANCH> REFRESH METADATA
 {%- endmacro -%}
 
 {% macro alter_table_refresh_metadata(table_relation) -%}
-  {%- set branch = var('branch') | default(None) %}
+  {%- set branch = var('branch', None)  %}
   alter table {{ table_relation }} {% if branch %} at branch {{ branch }} {% endif %} refresh metadata
 {%- endmacro -%}
 
 {% macro alter_pds(table_relation, avoid_promotion=True, lazy_update=True, delete_when_missing=True, forget_metadata=False) -%}
-  {%- set branch = var('branch') | default(None) %}
+  {%- set branch = var('branch', None) %}
   alter pds {{ table_relation }} {% if branch %} at branch {{ branch }} {% endif %} refresh metadata
   {% if forget_metadata %}
     forget metadata

@@ -20,7 +20,7 @@ limitations under the License.*/
 
   {%- set sql_header = config.get('sql_header', none) -%}
 
-  {%- set branch = var('branch') | default(None) %}
+  {%- set branch = var('branch', None) %}
 
   {{ sql_header if sql_header is not none }}
 
