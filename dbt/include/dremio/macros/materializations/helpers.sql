@@ -40,3 +40,10 @@ limitations under the License.*/
     {% if not loop.last %} and {% endif -%}
   {%- endfor -%}
 {%- endmacro -%}
+
+{% macro branch() %}
+  {%- set method = config.get('branch', validator=validation.any[basestring]) -%}
+  {%- if method is not none -%}
+   {{ method }}
+  {%- endif %}
+{%- endmacro -%}

@@ -14,15 +14,16 @@ limitations under the License.*/
 
 {% macro dremio__create_view_as(relation, sql) -%}
   {% set contract_config = config.get('contract') %}
+
   {% if contract_config.enforced %}
      {{exceptions.warn("Model contracts are not enforced by dbt-dremio!")}}
   {% endif %}
 
   {%- set sql_header = config.get('sql_header', none) -%}
 
-  {%- set branch = var('branch', None) %}
-
   {{ sql_header if sql_header is not none }}
+
+  {% set branch = config.get('branch') %}
 
   create or replace view {{ relation }} {% if branch %} at branch {{ branch }} {% endif %} as {{ sql }}
 
