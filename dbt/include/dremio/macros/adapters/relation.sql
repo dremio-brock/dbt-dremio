@@ -22,7 +22,7 @@ limitations under the License.*/
 
 {% macro dremio__drop_relation(relation) -%}
   {% call statement('drop_relation', auto_begin=False) -%}
-  {%- set branch = var('branch', None) %}
+  {% set branch = config.get('branch') %}
     drop {{ relation.type }} if exists {{ relation }} {% if branch %} at branch {{ branch }} {% endif %}
   {%- endcall %}
 {% endmacro %}
@@ -32,7 +32,7 @@ limitations under the License.*/
     {{ get_create_table_as_sql(temporary=False, relation=to_relation, sql="select * from " ~ from_relation)}}
   {%- endcall %}
   {% call statement('rename_relation2/2 - drop from_relation') -%}
-  {%- set branch = var('branch') | default(None) %}
+  {% set branch = config.get('branch') %}
     DROP TABLE {{from_relation}} {% if branch %} at branch {{ branch }} {% endif %}
   {%- endcall %}
 {% endmacro %}
